@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Solicitar Pedido{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card p-4">
+            {% if producto %}
+                <h1 class="card-title">Solicitar Personalización de: {{ producto.nombre }}</h1>
+                <p class="lead">Estás solicitando una versión personalizada basada en el producto <strong>{{ producto.nombre }}</strong>.</p>
+            {% else %}
+                <h1 class="card-title">Solicitud de Pedido Personalizado</h1>
+                <p class="lead">Completa este formulario con tus datos y describe el artículo que deseas personalizar.</p>
+            {% endif %}
+
+            <!-- Formulario con soporte para subida de archivos (enctype) -->
+            <form method="post" enctype="multipart/form-data" class="mt-4">
+                {% csrf_token %}
+
+                <!-- Campos de Cliente -->
+                <fieldset class="mb-4 border p-3 rounded">
+                    <legend class="float-none w-auto px-2 fs-5">Tus Datos de Contacto</legend>
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.nombre_cliente.label }}*</label>
+                        {{ form.nombre_cliente }}
+                        {% if form.nombre_cliente.errors %}<div class="text-danger">{{ form.nombre_cliente.errors }}</div>{% endif %}
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.email_cliente.label }}</label>
+                            {{ form.email_cliente }}
+                            {% if form.email_cliente.errors %}<div class="text-danger">{{ form.email_cliente.errors }}</div>{% endif %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.telefono_cliente.label }}</label>
+                            {{ form.telefono_cliente }}
+                            {% if form.telefono_cliente.errors %}<div class="text-danger">{{ form.telefono_cliente.errors }}</div>{% endif %}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.red_social_cliente.label }}</label>
+                        {{ form.red_social_cliente }}
+                        {% if form.red_social_cliente.errors %}<div class="text-danger">{{ form.red_social_cliente.errors }}</div>{% endif %}
+                    </div>
+                </fieldset>
+
+                <!-- Detalles de la Solicitud -->
+                <fieldset class="mb-4 border p-3 rounded">
+                    <legend class="float-none w-auto px-2 fs-5">Detalles del Pedido</legend>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.descripcion_solicitada.label }}*</label>
+                        {{ form.descripcion_solicitada }}
+                        {% if form.descripcion_solicitada.errors %}<div class="text-danger">{{ form.descripcion_solicitada.errors }}</div>{% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.imagenes_referencia.label }}</label>
+                        {{ form.imagenes_referencia }}
+                        {% if form.imagenes_referencia.errors %}<div class="text-danger">{{ form.imagenes_referencia.errors }}</div>{% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.fecha_necesidad.label }}</label>
+                        {{ form.fecha_necesidad }}
+                        <small class="form-text text-muted">{{ form.fecha_necesidad.help_text }}</small>
+                        {% if form.fecha_necesidad.errors %}<div class="text-danger">{{ form.fecha_necesidad.errors }}</div>{% endif %}
+                    </div>
+
+                    <!-- Campo oculto para el producto de referencia -->
+                    {% if producto %}
+                        {{ form.producto_referencia }}
+                    {% endif %}
+                </fieldset>
+                
+                <button type="submit" class="btn btn-primary btn-lg w-100">Enviar Solicitud de Pedido</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
