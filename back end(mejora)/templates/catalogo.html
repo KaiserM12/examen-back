@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Catálogo{% endblock %}
+
+{% block content %}
+
+<h1 class="mb-4">Catálogo de Productos</h1>
+
+<div class="mb-4">
+    <a href="{% url 'catalogo' %}" class="btn btn-secondary">Todos</a>
+    {% for categoria in categorias %}
+        <a href="{% url 'catalogo' %}?categoria={{ categoria.slug }}" class="btn btn-outline-secondary">
+            {{ categoria.nombre }}
+        </a>
+    {% endfor %}
+</div>
+
+{% if productos_destacados %}
+    <div class="alert alert-info">
+        <h3>⭐ Productos Destacados</h3>
+        <div class="row">
+            {% for producto in productos_destacados %}
+                <div class="col-md-3">
+                    <div class="card mb-3 border-info">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ producto.nombre }}</h5>
+                            <p class="text-primary fw-bold">${{ producto.precio_base }}</p>
+                            <a href="{% url 'producto_detalle' slug=producto.slug %}" class="btn btn-primary btn-sm">Ver</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
+
+<hr>
+
+<div class="row">
+    {% for producto in productos %}
+        <div class="col-md-4 mb-4"> <div class="card h-100">
+                {% if producto.imagenes.first %}
+                    <img src="{{ producto.imagenes.first.imagen.url }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                {% else %}
+                    <div class="bg-light text-center p-5">Sin Imagen</div>
+                {% endif %}
+
+                <div class="card-body">
+                    <h5 class="card-title">{{ producto.nombre }}</h5>
+                    <p class="card-text text-muted">{{ producto.categoria.nombre }}</p>
+                    <h4 class="text-success">${{ producto.precio_base }}</h4>
+                    <p>{{ producto.descripcion|truncatechars:50 }}</p>
+                    
+                    <a href="{% url 'producto_detalle' slug=producto.slug %}" class="btn btn-primary w-100">
+                        Ver Detalles
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="alert alert-warning">No hay productos disponibles.</div>
+    {% endfor %}
+</div>
+
+{% endblock %}

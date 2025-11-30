@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Seguimiento{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-8 offset-md-2"> <h2 class="mb-3">Seguimiento de Pedido</h2>
+        
+        {% if error_message %}
+            <div class="alert alert-danger">{{ error_message }}</div>
+        {% else %}
+
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    Pedido: {{ pedido.token_seguimiento }}
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <h5>Estado del Pedido</h5>
+                            <h2 class="text-primary">{{ pedido.get_estado_display }}</h2>
+                        </div>
+                        <div class="col-6 border-start">
+                            <h5>Estado del Pago</h5>
+                            <h2 class="{% if pedido.estado_pago == 'PAGADO' %}text-success{% else %}text-danger{% endif %}">
+                                {{ pedido.get_estado_pago_display }}
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <ul class="list-group mb-4">
+                <li class="list-group-item"><strong>Cliente:</strong> {{ pedido.nombre_cliente }}</li>
+                <li class="list-group-item"><strong>Fecha Solicitud:</strong> {{ pedido.fecha_creacion }}</li>
+                <li class="list-group-item"><strong>Producto Base:</strong> {{ pedido.producto_referencia }}</li>
+                <li class="list-group-item"><strong>Descripción:</strong> {{ pedido.descripcion_solicitada }}</li>
+                <li class="list-group-item"><strong>Monto Total:</strong> ${{ pedido.monto_total }}</li>
+            </ul>
+
+            {% if imagenes_referencia %}
+                <h4>Imágenes que enviaste:</h4>
+                <div class="row">
+                    {% for img in imagenes_referencia %}
+                        <div class="col-4">
+                            <img src="{{ img.imagen.url }}" class="img-thumbnail">
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="mt-4">
+                <a href="{% url 'catalogo' %}" class="btn btn-secondary">Volver al inicio</a>
+            </div>
+
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

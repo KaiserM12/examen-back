@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Detalle del producto{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-6">
+        {% if producto.imagenes.all %}
+            <div class="mb-3">
+                {% for img in imagenes %}
+                    <img src="{{ img.imagen.url }}" class="img-fluid mb-2 rounded" alt="{{ producto.nombre }}">
+                {% endfor %}
+            </div>
+        {% else %}
+            <img src="https://placehold.co/600x400/cccccc/333333?text=Sin+Imagen"
+                 class="img-fluid rounded" alt="Sin imagen">
+        {% endif %}
+    </div>
+
+    <div class="col-md-6">
+        <h1>{{ producto.nombre }}</h1>
+        <p class="text-muted mb-1">
+            Categoría: {{ producto.categoria.nombre }}
+        </p>
+
+        <p class="fs-3 text-primary mb-3">
+            $ {{ producto.precio_base|floatformat:2 }}
+        </p>
+
+        <p>{{ producto.descripcion }}</p>
+
+
+        <a href="{% url 'solicitar_pedido_producto' producto.id %}"
+           class="btn btn-success mt-3">
+            Solicitar este producto
+        </a>
+
+        <a href="{% url 'solicitar_pedido' %}"
+           class="btn btn-outline-secondary mt-3 ms-2">
+            Solicitar otro artículo personalizado
+        </a>
+    </div>
+</div>
+
+{% endblock %}
